@@ -1,0 +1,12 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /workspaces/{workspaceId}/files/{fileId} {
+      allow read: if workspaceId.matches('^[A-Z0-9_-]{4,24}$');
+      allow create: if workspaceId.matches('^[A-Z0-9_-]{4,24}$')
+        && request.resource.data.codes is list
+        && request.resource.data.codes.size() <= 2000;
+      allow update, delete: if false;
+    }
+  }
+}
