@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0759d9" />
+  <meta name="description" content="Captura y administra códigos VIN de 17 caracteres." />
+  <title>BirdDropping · Captura VIN</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/birddropping-logo.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="BirdDropping, inicio">
+        <img src="assets/birddropping-logo.png" alt="" />
+        <span><strong>BirdDropping</strong><small>VIN capture</small></span>
+      </a>
+      <div class="mode-switch" role="group" aria-label="Seleccionar modo">
+        <button class="mode-btn active" data-mode="mobile" type="button"><span>▣</span> Móvil</button>
+        <button class="mode-btn" data-mode="desktop" type="button"><span>▤</span> PC</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="mobileView" class="view active" aria-labelledby="captureTitle">
+        <div class="page-heading">
+          <div><p class="eyebrow">CAPTURA EN CAMPO</p><h1 id="captureTitle">Escáner de VIN</h1></div>
+          <div class="counter"><strong id="scanCount">0</strong><span>capturados</span></div>
+        </div>
+
+        <div class="capture-grid">
+          <article class="camera-card">
+            <div class="camera-stage" id="cameraStage">
+              <video id="camera" playsinline muted></video>
+              <div class="scan-mask" aria-hidden="true"><div class="scan-line"></div></div>
+              <div class="camera-empty" id="cameraEmpty">
+                <span class="camera-icon">▣</span>
+                <strong>Cámara lista para iniciar</strong>
+                <small>Coloca el código dentro del recuadro</small>
+              </div>
+            </div>
+            <div class="camera-actions">
+              <button id="startCamera" class="btn btn-primary" type="button">Iniciar cámara</button>
+              <button id="stopCamera" class="btn btn-ghost" type="button" disabled>Detener</button>
+            </div>
+            <p id="cameraStatus" class="status" role="status">Usa Chrome o Edge y permite el acceso a la cámara.</p>
+          </article>
+
+          <div class="capture-panel">
+            <article class="card candidate-card">
+              <label for="candidate">Código detectado</label>
+              <div class="candidate-row">
+                <input id="candidate" type="text" maxlength="17" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="17 caracteres" aria-describedby="vinHelp" />
+                <span id="validBadge" class="badge">Pendiente</span>
+              </div>
+              <p id="vinHelp" class="field-help">Verifica el código físicamente antes de capturarlo.</p>
+              <button id="captureBtn" class="btn btn-accent btn-full" type="button" disabled>Capturar</button>
+            </article>
+
+            <article class="card list-card">
+              <div class="card-title"><h2>Lista actual</h2><button id="clearDraft" class="text-btn" type="button">Limpiar</button></div>
+              <ol id="scanList" class="scan-list"><li class="empty-row">Aún no hay códigos capturados.</li></ol>
+            </article>
+
+            <button id="finishBtn" class="btn btn-dark btn-full finish-btn" type="button" disabled>Finalizar y guardar TXT</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="desktopView" class="view" aria-labelledby="filesTitle">
+        <div class="page-heading desktop-heading">
+          <div><p class="eyebrow">CENTRO DE ARCHIVOS</p><h1 id="filesTitle">Archivos guardados</h1><p class="muted">Consulta y descarga las capturas realizadas en campo.</p></div>
+          <button id="refreshFiles" class="btn btn-ghost" type="button">Actualizar</button>
+        </div>
+
+        <article class="workspace-card">
+          <div><label for="workspaceCode">Código de espacio de trabajo</label><p>Usa el mismo código en móvil y PC para sincronizar.</p></div>
+          <div class="workspace-control"><input id="workspaceCode" maxlength="24" placeholder="Ej. PATIO-NORTE" /><button id="saveWorkspace" class="btn btn-primary" type="button">Conectar</button></div>
+        </article>
+
+        <div class="stats-row">
+          <article><span>Archivos</span><strong id="fileCount">0</strong></article>
+          <article><span>VIN registrados</span><strong id="vinTotal">0</strong></article>
+          <article><span>Última captura</span><strong id="lastCapture">—</strong></article>
+        </div>
+
+        <article class="card files-card">
+          <div class="card-title"><h2>Historial</h2><span id="syncBadge" class="sync-badge local">Solo local</span></div>
+          <div class="table-wrap">
+            <table><thead><tr><th>Archivo</th><th>Fecha</th><th>Registros</th><th>Origen</th><th></th></tr></thead><tbody id="filesBody"><tr><td colspan="5" class="table-empty">No hay archivos guardados.</td></tr></tbody></table>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="firebase-config.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
